@@ -89,11 +89,6 @@ def add_flight():
 
   return flight_schema.jsonify(new_flight)
 
-@app.route('/')
-def index():
-  return 'hello flaskieee'
-
-
 #run server
 if __name__ == '__main__':
   app.run()
