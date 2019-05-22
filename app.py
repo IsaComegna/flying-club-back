@@ -5,16 +5,10 @@ import os
 
 #init app
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-#database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/flying-club'
+app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLACHEMY_TRACK_MODIFICATIONS'] = False
-#init db
 db = SQLAlchemy(app)
-#init marshmallow
 ma = Marshmallow(app)
-
 
 # classes
 class User(db.Model):
@@ -29,9 +23,6 @@ class User(db.Model):
   def __repr__(self):
     return '<User %r>' %self.username
 
-class UserSchema(ma.Schema):
-  class Meta:
-    fields = ('id', 'username', 'email')
 
 
 class Flight(db.Model):
@@ -52,6 +43,11 @@ class Flight(db.Model):
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
+class UserSchema(ma.Schema):
+  class Meta:
+    fields = ('id', 'username', 'email')
+
+
 class FlightSchema(ma.Schema):
   class Meta:
     fields = ('id', 'matricula_aluno', 'date', 'dateTimeStart', 'dateTimeEnd', 'comment')
@@ -62,6 +58,7 @@ users_schema =UserSchema(many=True, strict=True)
 
 flight_schema = FlightSchema(strict=True)
 flights_schema =FlightSchema(many=True, strict=True)
+
 
 # routes
 @app.route('/user', methods=['POST'])
@@ -89,6 +86,6 @@ def add_flight():
 
   return flight_schema.jsonify(new_flight)
 
-#run server
+
 if __name__ == '__main__':
-  app.run()
+    app.run()
