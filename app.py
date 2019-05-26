@@ -74,17 +74,22 @@ def add_user():
 
 @app.route('/voo', methods=['POST'])
 def add_flight():
-  matricula_aluno = request.json['matricula_aluno']
-  date = request.json['date']
-  dateTimeStart = request.json['dateTimeStart']
-  dateTimeEnd = request.json['dateTimeEnd']
-  comment = request.json['comment']
+  try:
+    matricula_aluno = request.json['matricula_aluno']
+    date = request.json['date']
+    dateTimeStart = request.json['dateTimeStart']
+    dateTimeEnd = request.json['dateTimeEnd']
+    comment = request.json['comment']
 
-  new_flight = Flight(matricula_aluno, date, dateTimeStart, dateTimeEnd, comment)
-  db.session.add(new_flight)
-  db.session.commit()
+    new_flight = Flight(matricula_aluno, date, dateTimeStart, dateTimeEnd, comment)
+    db.session.add(new_flight)
+    db.session.commit()
 
-  return flight_schema.jsonify(new_flight)
+    return flight_schema.jsonify(new_flight)
+
+  except Exception as e:
+    app.logger.error('Unhandled Exception: %s', (e))
+    render_template("500.html", error = str(e))
 
 
 if __name__ == '__main__':
