@@ -13,9 +13,9 @@
   - export FLASK_APP=api.py
   - export APP_SETTINGS="config.DevelopmentConfig"
 - Create the database
-  $ python
-  $ from app import db
-  $ db.create_all()
+  - $ python
+  - $ from app import db
+  - $ db.create_all()
 - Run "flask run"
 
 ## The app is deployed on Heroku at the following url:
