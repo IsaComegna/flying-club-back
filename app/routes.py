@@ -14,8 +14,9 @@ flights_schema =FlightSchema(many=True, strict=True)
 def add_user():
   username = request.json['username']
   email = request.json['email']
+  user_type = request.json['user_type']
 
-  new_user = User(username, email)
+  new_user = User(username, email, user_type)
   db.session.add(new_user)
   db.session.commit()
 
@@ -28,8 +29,9 @@ def add_flight():
   dateTimeStart = request.json['dateTimeStart']
   dateTimeEnd = request.json['dateTimeEnd']
   comment = request.json['comment']
+  grade = request.json['grade']
 
-  new_flight = Flight(matricula_aluno, date, dateTimeStart, dateTimeEnd, comment)
+  new_flight = Flight(matricula_aluno, date, dateTimeStart, dateTimeEnd, comment, grade)
   db.session.add(new_flight)
   db.session.commit()
 
