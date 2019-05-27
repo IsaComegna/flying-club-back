@@ -4,32 +4,34 @@ from datetime import datetime
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(80), unique=True)
+  matricula = db.Column(db.String())
+  name = db.Column(db.String(80), unique=True)
   email = db.Column(db.String(120), unique=True)
   user_type = db.Column(db.String)
 
-  def __init__(self, username, email, user_type):
-    self.username = username
+  def __init__(self, matricula, name, email, user_type):
+    self.name = name
+    self.matricula = matricula
     self.email = email
     self.user_type = user_type
 
   def __repr__(self):
-    return '<User %r>' %self.username
+    return '<User %r>' %self.name
 
 class Flight(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     matricula_aluno = db.Column(db.String())
-    date = db.Column(db.Date())
-    dateTimeStart = db.Column(db.Date())
-    dateTimeEnd = db.Column(db.Date())
+    registerDate = db.Column(db.Date())
+    dateTimeFlightStart = db.Column(db.DateTime())
+    dateTimeFlightEnd = db.Column(db.DateTime())
     grade = db.Column(db.Float())
     comment = db.Column(db.Text())
 
-    def __init__(self, matricula_aluno, date, dateTimeStart, dateTimeEnd, comment, grade):
+    def __init__(self, matricula_aluno, registerDate, dateTimeFlightStart, dateTimeFlightEnd, comment, grade):
         self.matricula_aluno = matricula_aluno
-        self.date = date
-        self.dateTimeStart = dateTimeStart
-        self.dateTimeEnd = dateTimeEnd
+        self.registerDate = registerDate
+        self.dateTimeFlightStart = dateTimeFlightStart
+        self.dateTimeFlightEnd = dateTimeFlightEnd
         self.comment = comment
         self.grade = grade
 
@@ -38,8 +40,8 @@ class Flight(db.Model):
 
 class UserSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'username', 'email', 'user_type')
+    fields = ('id', 'matricula', 'name', 'email', 'user_type')
 
 class FlightSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'matricula_aluno', 'date', 'dateTimeStart', 'dateTimeEnd', 'comment', 'grade')
+    fields = ('id', 'matricula_aluno', 'registerDate', 'dateTimeFlightStart', 'dateTimeFlightEnd', 'comment', 'grade')
