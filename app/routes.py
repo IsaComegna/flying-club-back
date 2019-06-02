@@ -1,7 +1,9 @@
 from app import app, db
 from flask import Flask, request, jsonify
 from app.models import User, Flight, UserSchema, FlightSchema
+from flask_cors import CORS
 
+CORS(app)
 
 # initialize schema
 user_schema = UserSchema(strict=True)
