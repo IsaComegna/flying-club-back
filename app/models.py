@@ -8,12 +8,19 @@ class User(db.Model):
   name = db.Column(db.String(80), unique=True)
   email = db.Column(db.String(120), unique=True)
   user_type = db.Column(db.String)
+  cpf = db.Column(db.Integer, unique=True)
+  phone_number = db.Column(db.String)
+  birthday = db.Column(db.Date())
 
-  def __init__(self, matricula, name, email, user_type):
+
+  def __init__(self, matricula, name, email, user_type, cpf, phone_number, birthday):
     self.name = name
     self.matricula = matricula
     self.email = email
     self.user_type = user_type
+    self.cpf = cpf
+    self.phone_number = phone_number
+    self.birthday = birthday
 
   def __repr__(self):
     return '<User %r>' %self.name
@@ -40,7 +47,7 @@ class Flight(db.Model):
 
 class UserSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'matricula', 'name', 'email', 'user_type')
+    fields = ('id', 'matricula', 'name', 'email', 'user_type', 'cpf', 'phone_number', 'birthday')
 
 class FlightSchema(ma.Schema):
   class Meta:

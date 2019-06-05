@@ -2,7 +2,6 @@ from app import app, db
 from flask import Flask, request, jsonify
 from app.models import User, Flight, UserSchema, FlightSchema
 from flask_cors import CORS
-
 CORS(app)
 
 # initialize schema
@@ -15,11 +14,14 @@ flights_schema =FlightSchema(many=True, strict=True)
 @app.route('/registro-usuario', methods=['POST'])
 def add_user():
   name = request.json['name']
-  matricula = request.json['matricula']
   email = request.json['email']
   user_type = request.json['user_type']
+  cpf = request.json['cpf']
+  phone_number = request.json['phone_number']
+  birthday = request.json['birthday']
+  matricula = request.json['cpf']
 
-  new_user = User(matricula, name, email, user_type)
+  new_user = User(matricula, name, email, user_type, cpf, phone_number, birthday)
   db.session.add(new_user)
   db.session.commit()
 
