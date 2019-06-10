@@ -22,6 +22,10 @@ class User(db.Model):
     self.phone_number = phone_number
     self.birthday = birthday
 
+  def persist(self):
+    db.session.add(self)
+    db.session.commit()
+
   def __repr__(self):
     return '<User %r>' %self.name
 
@@ -41,6 +45,10 @@ class Flight(db.Model):
         self.dateTimeFlightEnd = dateTimeFlightEnd
         self.comment = comment
         self.grade = grade
+
+    def persist(self):
+      db.session.add(self)
+      db.session.commit()
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

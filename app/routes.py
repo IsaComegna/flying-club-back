@@ -22,8 +22,7 @@ def add_user():
   matricula = request.json['cpf']
 
   new_user = User(matricula, name, email, user_type, cpf, phone_number, birthday)
-  db.session.add(new_user)
-  db.session.commit()
+  new_user.persist()
 
   return user_schema.jsonify(new_user)
 
@@ -37,8 +36,7 @@ def add_flight():
   grade = request.json['grade']
 
   new_flight = Flight(matricula_aluno, registerDate, dateTimeFlightStart, dateTimeFlightEnd, comment, grade)
-  db.session.add(new_flight)
-  db.session.commit()
+  new_flight.persist()
 
   return flight_schema.jsonify(new_flight)
 
