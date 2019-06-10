@@ -3,13 +3,13 @@ from datetime import datetime
 
 
 class User(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
+  id = db.Column(db.BigInteger(), primary_key=True)
   matricula = db.Column(db.String())
   name = db.Column(db.String(80), unique=True)
   email = db.Column(db.String(120), unique=True)
-  user_type = db.Column(db.String)
-  cpf = db.Column(db.Integer, unique=True)
-  phone_number = db.Column(db.String)
+  user_type = db.Column(db.String())
+  cpf = db.Column(db.BigInteger, unique=True)
+  phone_number = db.Column(db.String())
   birthday = db.Column(db.Date())
 
 
@@ -31,7 +31,7 @@ class User(db.Model):
 
 class Flight(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    matricula_aluno = db.Column(db.String())
+    matricula_aluno = db.Column(db.BigInteger())
     registerDate = db.Column(db.Date())
     dateTimeFlightStart = db.Column(db.DateTime())
     dateTimeFlightEnd = db.Column(db.DateTime())
