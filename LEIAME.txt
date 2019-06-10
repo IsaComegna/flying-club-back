@@ -45,7 +45,7 @@ Dentro da pasta app, encontra-se o código referente às rotas e classes da apli
 ### Endpoints criados ###
   Foram criados vários métodos que refletem diversas rotas na aplicação. Apesar de apenas dois serem utilizados pelo front-end na presente implementação, optamos por colocar mais métodos pensamos no MVP que gostaríamos de apresentar. Dessa maneira, o funcionário da escola poderia utilizar os métodos e obter informações ou gravá-las no banco de dados por meio de alguma ferramenta como o Postman. E a View do front-end serviria mais como uma demonstração mais próxima do que seria o produto final caso tudo pudesse ter sido implementado no tempo que tivemos.
 
-- O primeiro método é o add_user(), correspondente a rota 'uri/registro-usuario'. Esse método responde a um POST com os atributos necessários para criar um usuário e o cria no banco de dados (passa atributos para Model, que cria no BD por meio do método persist). 
+- O primeiro método é o add_user(), correspondente a rota 'uri/registro-usuario'. Esse método responde a um POST com os atributos necessários para criar um usuário e o cria no banco de dados (passa atributos para Model, que cria no BD por meio do método persist).
 O user_type deve ser ou "student", caso queira criar um aluno, ou "instructor", para professores. Optou-se por utilizar, por hora, uma tabela só para ambos para diminuir a complexidade computacional e assim conseguirmos fazer entregas mais rápidas.
 
 - O segundo método é o add_flight, correspondente a rota 'uri/registro-voo'. Ele recebe por um POST os parâmetros de voo e os envia para o Model, que grava o voo na base de dados (por meio do método persist)
@@ -91,7 +91,7 @@ Também é possível ver o número de matrícula pelo JSON que é retornado no m
 Esta é a rota de registro de usuário.
 É importante colocar como 'Content-Type' o tipo 'application/json'.
 Em body, selecione a opção 'raw' e digite o JSON com os campos que devem ser enviados no método POST ("name" com o nome do usuário, "email" com o e-mail, "user_type" que deve ser ou "student" ou "instructor", "phone_number" com o número de telefone e "birthday" com o dia de aniversário).
-OBS: o campo "birthday" deve ser no formato de data brasileiro (DD/MM/AAAA)
+OBS: o campo "birthday" deve ser no formato Date (AAAA-MM-DD)
 OBS: os campos referentes a: nome, e-mail e CPF devem ser únicos para cada usuário, caso contrário um erro 500 será a resposta do POST.
 
 Ex de 'body' para a requisição:
@@ -101,13 +101,15 @@ Ex de 'body' para a requisição:
 	"user_type": "student",
 	"cpf": "40496573844",
 	"phone_number": "99999999",
-	"birthday": "15/05/2019"
+	"birthday": "2019-06-07"
 	}
 
 - https://flying-club-engesoft.herokuapp.com/registro-voo
 Esta é a rota de registro de voo.
 É importante colocar como 'Content-Type' o tipo 'application/json'.
 Em body, selecione a opção 'raw' e digite o JSON com os campos que devem ser enviados no método POST ("matricula_aluno" para identificar o aluno da aula de voo, "registerDate" com a data em que o registro está sendo feito, "dateTimeFlightStart" com o dateTime em que o voo começou, "dateTimeFlightEnd" com o dateTime em que o voo terminou, "grade" com um float da nota da aula correspondente, "comment" com comentários sobre a aula e performance do aluno).
+OBS: os campos "dateTimeFlightStart" e "dateTimeFlightEnd" devem ser no formato DateTime (AAAA-MM-DD HH:MM:SS)
+OBS: o campo "registerDate" deve ser no formato Date (AAAA-MM-DD)
 
 Ex de 'body' para a requisição:
 	{
