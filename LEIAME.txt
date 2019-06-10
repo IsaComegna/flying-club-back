@@ -1,0 +1,121 @@
+### Estrutura de arquivos: ###
+
+# Na raiz do projeto estão os arquivos de configuração do projeto.
+
+- O arquivo ".gitignore" contém a informação de quais arquivos devem ser ignorados pelo github (são os arquivos que não são submetidos ao repositório).
+
+- O arquivo "api.py" faz a inicialização da aplicação.
+	Nele também há uma função que faz a inicialização do contexto de shell da aplicação, ou seja, inicializa variáveis quando é aberta uma seção de shell (em um terminal). Isso facilita testes.
+
+- O arquivo "config.py" traz as configurações da aplicação que serão utilizadas em cada ambiente de desenvolvimento.
+	Há configurações a serem utilizadas em todos ambientes, tais como a chave secreta da aplicação e a uri do banco de dados a ser usado.
+	Para o ambiente de produção (no Heroku), configura-se a opção de debug do código para falso. Nos outros ambientes (desenvolvimento e staging), o debug é verdadeiro para facilitar os testes do código na fase de desenvolvimento do mesmo. Além disso, há uma variável "DEVELOPMENT", que não foi utilizada, mas poderia ter sido utilizada em condicionais para que o código se portasse de maneira diferente em produção ou desenvolvimento, também auxiliando no processo de desenvolvimento de software.
+
+- O arquivo "manage.py" é um arquivo com código para auxiliar nas migrações do banco de dados. Nele são importadas dependências chamadas "Migrate" e "MigrateCommand". Com essas dependência, alterar o banco torna-se mais fácil.
+
+- O arquivo de "Procfile" é utilizado pelo Heroku no momento de deploy da aplicação. Utilizamos o "Gunicorn", um gateway de interface HTTP.
+
+- O arquivo "requirements.txt" também é utilizado pelo Heroku, desta vez para a instalação de todas as dependências da aplicação no ambiente de produção.
+
+- O arquivo "runtime.txt" é utilizado pelo Heroku para a instalação da versão correta do Python no momento do deploy.
+
+
+# Pasta app
+Dentro da pasta app, encontra-se o código referente às rotas e classes da aplicação.
+
+- No arquivo "__init__.py" faz-se a inicialização da instância da aplicação, bem como inicializa-se os objetos de configuração (com informações dos arquivos citados anteriormente). Também inicializa-se uma instância do banco de dados, a ser manipulada durante a seção da aplicação e importa-se as rotas e o models (arquivo com classes).
+
+- No arquivo "models.py" estão descritas as classes da aplicação (User e Flight).
+  Para cada classe, há uma função de inicialização de objetos com os parâmetros da classe e há a ligação com o banco de dados e suas colunas.
+  Também há o método persist(), que recebe um objeto da classe e o persiste no banco de dados. Isso é importante para que o Controller, na arquitetura MVC, possa enviar o objeto para o Model, que deve se comunicar com banco.
+  Define-se também os "schemas" a serem utilizados pelo banco de dados.
+  Este é o arquivo em que estão as funções do "Model" no modelo MVC seguido para o projeto.
+  As funções do Model servem para fazer determinações de atributos ou métodos próprios do modelo de negócio e para comunicarem-se diretamente com o banco de dados. É nestas funções que informações tornam-se permanentes entre uma sessão e outra da aplicação (elas são registradas no banco de dados).
+
+- No arquivo "routes.py" estão os endpoints da aplicação a serem utilizados pelo front-end para comunicação com o banco de dados. Este arquivo é o arquivo em que está a entidade "Controller" no modelo MVC seguido para o projeto.
+  As funções HTTP ou recebem atributos que são enviados para o Model e armazenados no banco de dados ou retornam objetos para a View do tipo JSON a partir da comunicação com o Model.
+
+
+### Especificações do projeto ###
+- Utilizou-se a linguagem Python na versão 2.7.16
+- O banco de dados utilizado é do tipo relacional, mais especificamente PostgreSQL.
+- Utilizou-se o framework de projetos Flask.
+- A aplicação encontra-se no Heroku, bem como seu banco de dados.
+
+### Endpoints criados ###
+  Foram criados vários métodos que refletem diversas rotas na aplicação. Apesar de apenas dois serem utilizados pelo front-end na presente implementação, optamos por colocar mais métodos pensamos no MVP que gostaríamos de apresentar. Dessa maneira, o funcionário da escola poderia utilizar os métodos e obter informações ou gravá-las no banco de dados por meio de alguma ferramenta como o Postman. E a View do front-end serviria mais como uma demonstração mais próxima do que seria o produto final caso tudo pudesse ter sido implementado no tempo que tivemos.
+
+- O primeiro método é o add_user(), correspondente a rota 'uri/registro-usuario'. Esse método responde a um POST com os atributos necessários para criar um usuário e o cria no banco de dados (passa atributos para Model, que cria no BD por meio do método persist). 
+O user_type deve ser ou "student", caso queira criar um aluno, ou "instructor", para professores. Optou-se por utilizar, por hora, uma tabela só para ambos para diminuir a complexidade computacional e assim conseguirmos fazer entregas mais rápidas.
+
+- O segundo método é o add_flight, correspondente a rota 'uri/registro-voo'. Ele recebe por um POST os parâmetros de voo e os envia para o Model, que grava o voo na base de dados (por meio do método persist)
+
+- O método get_flights, correspondente a rota '/voos', obtém todos os voos do banco de dados e retorna a lista deles em formato JSON.
+Este método foi implementado pensando no caso de uso em que os funcionários da escola gostariam de obter todos os voos que estão sendo realizados nela, para manter controle.
+
+- O método get_flights_per_student, correspondente a rota '/voos/matricula_aluno', obtém todos os voos do banco de dados que estejam associados à matrícula do aluno passada na url, e retorna a lista deles em formato JSON.
+Este método foi pensado para auxiliar a implementar o caso de uso de consultar o número de horas de voo de um aluno, calculadas a partir dessa lista de voos e suas durações. Além disso, poderia ser implementada uma funcionalidade em que o aluno pode consultar que dias realizou seus voos e com qual instrutor, com o auxílio desde método.
+
+- O método get_instructors, correspondente a rota '/professores', obtém todos os professores cadastrados no banco de dados e retorna a lista deles em formato JSON.
+Este método foi pensado, também, para ser utilizado pelos funcionários administrativos da empresa, de forma que pudessem ter algum controle dos professores da escola.
+
+- O método get_students, correspondente a rota '/alunos', obtém todos os alunos cadastrados no banco de dados e retorna a lista deles em formato JSON.
+Este método foi pensado, também, para ser utilizado pelos funcionários administrativos da empresa, de forma que pudessem ter algum controle dos professores da escola.
+
+## Como testar o projeto ##
+- Para fazer os testes em produção do projeto, é possível fazê-los tanto pela ferramenta Postman ou pelo browser (para os métodos get).
+
+# Pelo browser (é possível testar os métodos get):
+
+- https://flying-club-engesoft.herokuapp.com/usuarios
+No browser é possível ver o JSON com os dados de todos os usuários.
+
+- https://flying-club-engesoft.herokuapp.com/professores
+No browser é possível ver o JSON com os dados de todos os professores.
+
+- https://flying-club-engesoft.herokuapp.com/alunos
+No browser é possível ver o JSON com os dados de todos os alunos.
+
+- https://flying-club-engesoft.herokuapp.com/voos
+No browser é possível ver o JSON com os dados de todos os voos.
+
+- https://flying-club-engesoft.herokuapp.com/voos/<numero-matricula>
+No browser é possível ver o JSON com os dados de todos os voos.
+Para obter o número de matrícula de um aluno que deseja consultar, você pode primeiro consultar os usuarios pela rota '/usuarios' e pegar o número de matrícula do usuário que quiser consultar.
+Também é possível ver o número de matrícula pelo JSON que é retornado no momento de cadastro de usuário.
+
+# Pelo Postman (ou alternativamente curl):
+É possível testar qualquer rota pelo Postman, observando o JSON de resposta.
+
+- https://flying-club-engesoft.herokuapp.com/registro-usuario
+Esta é a rota de registro de usuário.
+É importante colocar como 'Content-Type' o tipo 'application/json'.
+Em body, selecione a opção 'raw' e digite o JSON com os campos que devem ser enviados no método POST ("name" com o nome do usuário, "email" com o e-mail, "user_type" que deve ser ou "student" ou "instructor", "phone_number" com o número de telefone e "birthday" com o dia de aniversário).
+OBS: o campo "birthday" deve ser no formato de data brasileiro (DD/MM/AAAA)
+OBS: os campos referentes a: nome, e-mail e CPF devem ser únicos para cada usuário, caso contrário um erro 500 será a resposta do POST.
+
+Ex de 'body' para a requisição:
+	{
+	"name": "Ursinho Pooh",
+	"email": "urso_feliz@uol.com",
+	"user_type": "student",
+	"cpf": "40496573844",
+	"phone_number": "99999999",
+	"birthday": "15/05/2019"
+	}
+
+- https://flying-club-engesoft.herokuapp.com/registro-voo
+Esta é a rota de registro de voo.
+É importante colocar como 'Content-Type' o tipo 'application/json'.
+Em body, selecione a opção 'raw' e digite o JSON com os campos que devem ser enviados no método POST ("matricula_aluno" para identificar o aluno da aula de voo, "registerDate" com a data em que o registro está sendo feito, "dateTimeFlightStart" com o dateTime em que o voo começou, "dateTimeFlightEnd" com o dateTime em que o voo terminou, "grade" com um float da nota da aula correspondente, "comment" com comentários sobre a aula e performance do aluno).
+
+Ex de 'body' para a requisição:
+	{
+	"matricula_aluno": "123456",
+	"registerDate": "2019-05-27",
+	"dateTimeFlightStart": "2019-05-23 12:41:00",
+	"dateTimeFlightEnd": "2019-05-23 13:39:00",
+	"grade": 9.7,
+	"comment": "Tudo correu bem. Estava chuvoso e o aluno conseguiu ter boa performance."
+	}
+
